@@ -1,0 +1,114 @@
+## Code
+split {
+    code fdf {
+        code {
+            code
+        }
+
+        or
+
+        code languageName {
+            code
+        }
+    }
+    preview {
+        code {
+            code
+        }
+
+        or
+
+        code languageName {
+            code
+        }
+    }
+}
+code is a useful block, that also accounts and fixes indenting, for example
+
+split {
+    code fdf {
+        code fcl {
+            void main() {
+                print("Hello world!");
+            }
+        }
+    }
+    preview {
+        code fcl {
+            void main() {
+                print("Hello world!");
+            }
+        }
+    }
+}
+## Split
+split is a block that, well, splits it horizontally
+split {
+    code fdf {
+        split {
+            block {
+                hi
+            }
+            block {
+                wow
+            }
+        }
+    }
+    preview {
+        split {
+            block {
+                hi
+            }
+            block {
+                wow
+            }
+        }
+    }
+}
+## Block / Preview
+block and preview are pretty similar, simply being "containers"
+split {
+    code fdf {
+        hi
+        block {
+            goob
+        }
+    }
+    preview {
+        hi
+        block {
+            goob
+        }
+    }
+}
+preview though, centers the content inside on the y axis (this is useful in conjunction with split).
+split {
+    code fdf {
+        split {
+            code fdf {
+                hello!
+                
+                wow
+            }
+            preview {
+                hello!
+                
+                wow
+            }
+        }
+    }
+    preview {
+        split {
+            code fdf {
+                hello!
+                
+                wow
+            }
+            preview {
+                hello!
+                
+                wow
+            }
+        }
+    }
+}

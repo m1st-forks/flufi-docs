@@ -1,0 +1,46 @@
+# Whats FDF?
+fdf (or flufi doc format) is a custom markdown like language i designed specifically for flufi docs.
+
+# Hello world
+split {
+    code fdf {
+        Hello!
+    }
+    preview {
+        Hello!
+    }
+}
+this is a simple hello world in fdf, just the text you want to display
+# Headers
+split {
+    code fdf {
+        # Big header!
+
+        ## Slightly less big header!
+
+        ### Even smaller header!
+
+        #### Small header!
+
+        ##### Smaller header!
+
+        ###### Tiny header!
+    }
+    preview {
+        # Big header!
+        ## Slightly less big header!
+        ### Even smaller header!
+        #### Small header!
+        ##### Smaller header!
+        ###### Tiny header!
+    }
+}
+fdf supports headers 1-6, similar (almost identical) to html, with the same syntax as markdown
+# Blocks
+this is one of the things that fdf introduces, blocks.
+code fdf {
+    name {
+        content
+    }
+}
+see the blocks page for more info
