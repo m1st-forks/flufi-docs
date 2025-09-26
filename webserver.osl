@@ -1,0 +1,42 @@
+import "osl/fs"
+import "github.com/gin-gonic/gin"
+
+object mimeTypes = {
+    ".html": "text/html",
+    ".js": "application/javascript",
+    ".mjs": "application/javascript",
+    ".css": "text/css",
+    ".json": "application/json",
+    ".png": "image/png",
+    ".jpg": "image/jpeg",
+    ".jpeg": "image/jpeg",
+    ".gif": "image/gif",
+    ".svg": "image/svg+xml",
+    ".ico": "image/x-icon",
+    ".wasm": "application/wasm",
+}
+
+def main() (
+    fs.Chdir("./dist")
+    r = gin.Default()
+
+    r.NoRoute(def(*gin.Context c) -> (
+        c.Header("Access-Control-Allow-Origin", "*")
+        string path = c.Request.URL.Path
+
+        string ext = fs.getExt(path)
+        if ext != "" (
+            string filePath = fs.JoinPath(".", fs.getDir(path), fs.getBase(path))
+            if !fs.Exists(filePath) (
+                c.String(404, "File not found")
+                return
+            )
+            c.Header("Content-Type", mimeTypes[ext].@(string))
+            c.String(200, fs.ReadFile(filePath))
+            return
+        )
+        c.Header("Content-Type", "text/html")
+        c.String(200, fs.ReadFile("./index.html"))
+    ))
+    r.Run(":5173")
+)

@@ -1,0 +1,70 @@
+import "osl/fs"
+import "github.com/gin-gonic/gin"
+
+def serveFile(string path) gin.HandlerFunc (
+    return def(*gin.Context c) -> (
+        c.Header("Access-Control-Allow-Origin", "*")
+        if !fs.Exists(path) (
+            c.String(404, "File not found")
+            return
+        )
+        string data = fs.ReadFile(path)
+        c.String(200, data)
+    )
+)
+
+def list(string p) array (
+    if !fs.Exists(fs.JoinPath(p, ".doclist")) (
+        return []
+    )
+    array fsElems = fs.ReadFile(fs.JoinPath(p, ".doclist")).JsonParse()
+    array elems = []
+
+    for i fsElems.len (
+        string element = fsElems[i].@("string")
+        string elemPath = fs.JoinPath(p, element)
+
+        if element.endsWith("/") (
+            elems = elems.append([element.trim(1,-2), list(elemPath)])
+        ) else if element.endsWith("/?") (
+            elems = elems.append({
+                name: element.trim(1,-3),
+                children: list(fs.JoinPath(p, element.trim(1,-2)))
+            })
+        ) else if element.startsWith("#") (
+            elems = elems.append(element)
+        ) else (
+            elems = elems.append(element.split(" ")[1])
+        )
+    )
+    return elems
+)
+
+def main() (
+    fs.Chdir("./docs")
+
+    r = gin.Default()
+
+    r.GET("/page/*filepath", def(*gin.Context c) -> (
+		string path = c.Param("filepath").trim(2, -1)
+		string filePath = fs.JoinPath("./", path + ".fdf")
+        c.Header("Access-Control-Allow-Origin", "*")
+
+		if fs.Exists(filePath) (
+			c.String(200, fs.ReadFile(filePath))
+			return
+        )
+
+		c.String(404, "File not found")
+    ))
+
+    r.GET("/list", def(*gin.Context c) -> (
+        c.Header("Access-Control-Allow-Origin", "*")
+        c.JSON(200, list("./"))
+    ))
+
+    r.GET("/navbar-text", serveFile("./.navbar/text.fdf"))
+    r.GET("/navbar-config", serveFile("./.navbar/config.json"))
+
+    r.Run(":4000")
+)

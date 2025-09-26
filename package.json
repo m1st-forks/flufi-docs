@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "server:docs": "cd docs && node ../docsserver.cjs",
-    "server:web": "node ./webserver.cjs",
+    "server:docs": "osl run docsserver.osl",
+    "server:web": "osl run webserver.osl",
     "preview": "vite preview"
   },
   "devDependencies": {
