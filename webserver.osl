@@ -18,20 +18,20 @@ object mimeTypes = {
 
 def main() (
     fs.Chdir("./dist")
-    r = gin.Default()
+    r := gin.Default()
 
     r.NoRoute(def(*gin.Context c) -> (
         c.Header("Access-Control-Allow-Origin", "*")
         string path = c.Request.URL.Path
 
-        string ext = fs.getExt(path)
+        string ext = fs.GetExt(path)
         if ext != "" (
-            string filePath = fs.JoinPath(".", fs.getDir(path), fs.getBase(path))
+            string filePath = fs.JoinPath(".", fs.GetDir(path), fs.GetBase(path))
             if !fs.Exists(filePath) (
                 c.String(404, "File not found")
                 return
             )
-            c.Header("Content-Type", mimeTypes[ext].@(string))
+            c.Header("Content-Type", mimeTypes[ext].toStr())
             c.String(200, fs.ReadFile(filePath))
             return
         )

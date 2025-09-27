@@ -21,7 +21,7 @@ def list(string p) array (
     array elems = []
 
     for i fsElems.len (
-        string element = fsElems[i].@("string")
+        string element = fsElems[i]
         string elemPath = fs.JoinPath(p, element)
 
         if element.endsWith("/") (
@@ -43,7 +43,7 @@ def list(string p) array (
 def main() (
     fs.Chdir("./docs")
 
-    r = gin.Default()
+    r := gin.Default()
 
     r.GET("/page/*filepath", def(*gin.Context c) -> (
 		string path = c.Param("filepath").trim(2, -1)
